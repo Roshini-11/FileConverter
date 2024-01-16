@@ -1,0 +1,96 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>File Converter</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h2>File Converter</h2>-->
+
+<!--<input type="file" id="fileInput" accept=".json, .xml" />-->
+<!--<button type="button" onclick="convertAndDisplay()">Convert and Display</button>-->
+<!--<button type="button" onclick="downloadFile()">Download Converted File</button>-->
+
+<!--<hr>-->
+
+<!--<h3>Conversion Result</h3>-->
+<!--<textarea id="conversionResult" rows="10" cols="50" readonly></textarea>-->
+
+<!--<script>-->
+<!--    function convertAndDisplay() {-->
+<!--        const direction = 'json-to-xml'; // or 'xml-to-json'-->
+<!--        const fileInput = document.getElementById('fileInput');-->
+<!--        const formData = new FormData();-->
+<!--        formData.append('file', fileInput.files[0]);-->
+
+<!--        // Make a POST request to your Spring Boot backend for conversion-->
+<!--        // You can use fetch or any other AJAX library for this purpose-->
+<!--        fetch('/convert?direction=' + direction, {-->
+<!--            method: 'POST',-->
+<!--            body: formData-->
+<!--        })-->
+<!--        .then(response => response.json())-->
+<!--        .then(data => {-->
+<!--            const conversionResult = document.getElementById('conversionResult');-->
+<!--            conversionResult.value = JSON.stringify(data, null, 2);-->
+<!--        })-->
+<!--        .catch(error => console.error('Error converting file:', error));-->
+<!--    }-->
+
+<!--    function downloadFile() {-->
+<!--        // Make a GET request to your Spring Boot backend to get the converted file-->
+<!--        // You can use window.open or create a download link dynamically-->
+<!--        window.open('/download', '_blank');-->
+<!--    }-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
+
+<!-- src/main/resources/templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XML to JSON Converter</title>
+</head>
+<body>
+<h2>XML to JSON Converter</h2>
+
+<textarea id="xmlInput" rows="10" cols="50" placeholder="Paste your XML here"></textarea>
+<button type="button" onclick="convertXmlToJson()">Convert XML to JSON</button>
+
+<hr>
+
+<h3>Conversion Result</h3>
+<textarea id="jsonOutput" rows="10" cols="50" readonly></textarea>
+
+<script>
+    function convertXmlToJson() {
+    const xmlInput = document.getElementById('xmlInput').value;
+
+    fetch('/convert-xml-to-json', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ xmlData: xmlInput }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(jsonData => {
+        const jsonOutput = document.getElementById('jsonOutput');
+        jsonOutput.value = JSON.stringify(JSON.parse(jsonData), null, 2);
+    })
+    .catch(error => console.error('Error converting XML to JSON:', error));
+}
+
+</script>
+</body>
+</html>
+
