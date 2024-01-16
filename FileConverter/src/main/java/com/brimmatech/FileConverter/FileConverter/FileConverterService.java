@@ -2,6 +2,7 @@ package com.brimmatech.FileConverter.FileConverter;
 
 import com.brimmatech.FileConverter.SaveXml.*;
 import com.brimmatech.FileConverter.exception.*;
+import com.brimmatech.FileConverter.responseHandling.ResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,6 +51,16 @@ public class FileConverterService {
 
     public List<CombinedLoanDetails> getAllLoans() {
         return combinedLoanDetailsRepository.findAll();
+    }
+
+    public ResponseMessage deleteLoanDetailsByLoanId(String loanId) {
+        if (!combinedLoanDetailsRepository.existsById(loanId)) {
+            throw new LoanNotFoundException("Loan details with LoanID " + loanId + " not found");
+        }
+
+        combinedLoanDetailsRepository.deleteById(loanId);
+
+        return new ResponseMessage(200, "Success", "Loan ID " + loanId + " is deleted");
     }
 
     public List<LoanInformation> filterLoan(Map<String, String> filterBy) {

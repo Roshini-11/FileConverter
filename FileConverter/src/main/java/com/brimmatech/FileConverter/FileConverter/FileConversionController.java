@@ -1,6 +1,7 @@
 package com.brimmatech.FileConverter.FileConverter;
 
 import com.brimmatech.FileConverter.SaveXml.*;
+import com.brimmatech.FileConverter.exception.LoanNotFoundException;
 import com.brimmatech.FileConverter.responseHandling.ResponseMessage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,6 +62,17 @@ public class FileConversionController {
     @GetMapping("/all-loans")
     public List<CombinedLoanDetails> getAllLoans() {
         return fileConverterService.getAllLoans();
+    }
+
+    @DeleteMapping("/delete/{loanId}")
+    public ResponseEntity<ResponseMessage<String>> deleteLoanDetails(@PathVariable String loanId) {
+        try {
+            ResponseMessage response = fileConverterService.deleteLoanDetailsByLoanId(loanId);
+            return ResponseEntity.ok(new ResponseMessage<>(HttpStatus.OK.value(), "Success", response.getData().toString()));
+        } catch (LoanNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseMessage<>(HttpStatus.NOT_FOUND.value(), "Failure", e.getMessage()));
+        }
     }
 
 }
