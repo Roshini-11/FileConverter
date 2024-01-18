@@ -9,6 +9,7 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
 @Getter
@@ -17,6 +18,7 @@ import java.util.Date;
 @Table(name = "Loan_Information")
 @NoArgsConstructor
 @ToString
+@XmlRootElement
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class LoanInformation {

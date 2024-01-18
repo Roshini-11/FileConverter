@@ -1,19 +1,17 @@
 package com.brimmatech.FileConverter.FileConverter;
 
 import com.brimmatech.FileConverter.exception.ConversionException;
-import com.brimmatech.FileConverter.exception.DatabaseSaveException;
 import com.brimmatech.FileConverter.exception.XmlParsingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
-import org.springframework.http.HttpStatus;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -26,12 +24,21 @@ public class XmlToJsonConversion implements FileConversion {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final XmlMapper xmlMapper = new XmlMapper();
 
+    private final XmlProcessor xmlProcessor;
+
+    @Autowired
+    public XmlToJsonConversion(XmlProcessor xmlProcessor){
+        this.xmlProcessor = xmlProcessor;
+    }
+
     @Override
-    @Transactional
     public String conversion(String data) {
         try {
 
-            XmlProcessor.parseXml(data);
+            xmlProcessor.parseXml(data);
+
+            log.info("xmlProcessor instance: {}", xmlProcessor);
+
 
             DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             log.info(data);

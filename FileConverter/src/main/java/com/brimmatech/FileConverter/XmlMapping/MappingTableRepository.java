@@ -10,11 +10,5 @@ public interface MappingTableRepository extends JpaRepository<MappingTable, Stri
 
     @Query(value = "SELECT * FROM Mapping_Table", nativeQuery = true)
     List<MappingTable> findAll();
-//
-//    @Query(value = "SELECT column1 FROM Mapping_Table", nativeQuery = true)
-//    List<String> getAllColumn1Values();
-//
-//    @Query(value = "SELECT column2 FROM Mapping_Table", nativeQuery = true)
-//    List<String> getAllColumn2Values();
 
 }

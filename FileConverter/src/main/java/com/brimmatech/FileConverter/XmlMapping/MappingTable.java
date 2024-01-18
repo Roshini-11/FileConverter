@@ -1,16 +1,12 @@
 package com.brimmatech.FileConverter.XmlMapping;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "Mapping_Table")
-@NoArgsConstructor
 @ToString
 public class MappingTable {
 
@@ -21,4 +17,9 @@ public class MappingTable {
     private String Column1;
 
     private String Column2;
+
+    public MappingTable(String Column1, String Column2) {
+        this.Column1 = Column1;
+        this.Column2 = Column2;
+    }
 }

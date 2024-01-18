@@ -1,10 +1,10 @@
 package com.brimmatech.FileConverter.FileConverter;
 
 import com.brimmatech.FileConverter.SaveXml.*;
-import com.brimmatech.FileConverter.XmlMapping.MappingTableRepository;
 import com.brimmatech.FileConverter.exception.DuplicateLoanIdException;
 import com.brimmatech.FileConverter.exception.XmlParsingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -13,25 +13,14 @@ import java.util.*;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class XmlProcessor {
 
-    private static LoanInformationRepository loanInformationRepository;
-    private static AdditionalLoanInformationRepository additionalLoanInformationRepository;
-    private static CombinedLoanDetailsRepository combinedLoanDetailsRepository;
+    private  LoanInformationRepository loanInformationRepository;
+    private  AdditionalLoanInformationRepository additionalLoanInformationRepository;
+    private  CombinedLoanDetailsRepository combinedLoanDetailsRepository;
 
-    private static MappingTableRepository mappingTableRepository;
-
-    public XmlProcessor(LoanInformationRepository loanInformationRepository,
-                        AdditionalLoanInformationRepository additionalLoanInformationRepository,
-                        CombinedLoanDetailsRepository combinedLoanDetailsRepository,
-                        MappingTableRepository mappingTableRepository) {
-        XmlProcessor.loanInformationRepository = loanInformationRepository;
-        XmlProcessor.additionalLoanInformationRepository = additionalLoanInformationRepository;
-        XmlProcessor.combinedLoanDetailsRepository = combinedLoanDetailsRepository;
-        XmlProcessor.mappingTableRepository = mappingTableRepository;
-    }
-
-    public static void parseXml(String xmlContent) throws XmlParsingException {
+    public void parseXml(String xmlContent) throws XmlParsingException {
         try {
             log.info("Parsing XML content...");
 
@@ -57,7 +46,7 @@ public class XmlProcessor {
         }
     }
 
-    private static void saveLoanInformation(List<LoanInformation> loanInformations) {
+    private void saveLoanInformation(List<LoanInformation> loanInformations) {
         Set<String> uniqueLoanIds = new HashSet<>();
 
         for (LoanInformation loanInformation : loanInformations) {
@@ -73,14 +62,14 @@ public class XmlProcessor {
         }
     }
 
-    private static void saveAdditionalLoanInformation(List<AdditionalLoanInformation> additionalLoanInformations) {
+    private void saveAdditionalLoanInformation(List<AdditionalLoanInformation> additionalLoanInformations) {
         for (AdditionalLoanInformation additionalLoanInfo : additionalLoanInformations) {
             additionalLoanInformationRepository.save(additionalLoanInfo);
             log.info("AdditionalLoanInformation saved successfully: {}", additionalLoanInfo);
         }
     }
 
-    private static void saveLoanDetails(List<CombinedLoanDetails> combinedLoanDetailList) {
+    private void saveLoanDetails(List<CombinedLoanDetails> combinedLoanDetailList) {
         for (CombinedLoanDetails combinedLoanDetails : combinedLoanDetailList) {
             log.info(String.valueOf(combinedLoanDetails));
             combinedLoanDetailsRepository.save(combinedLoanDetails);

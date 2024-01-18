@@ -3,7 +3,6 @@ package com.brimmatech.FileConverter.FileConverter;
 import com.brimmatech.FileConverter.SaveXml.*;
 import com.brimmatech.FileConverter.exception.*;
 import com.brimmatech.FileConverter.responseHandling.ResponseMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,20 +14,23 @@ import java.util.stream.Collectors;
 @Service
 public class FileConverterService {
 
-    private Map<String, FileConversion> conversion;
+    private final Map<String, FileConversion> conversion;
 
-    @Autowired
-    private CombinedLoanDetailsRepository combinedLoanDetailsRepository;
+    private final CombinedLoanDetailsRepository combinedLoanDetailsRepository;
 
-    @Autowired
-    private LoanInformationRepository loanInformationRepository;
+    private final LoanInformationRepository loanInformationRepository;
 
-    @Autowired
-    private AdditionalLoanInformationRepository additionalLoanInformationRepository;
+    private final AdditionalLoanInformationRepository additionalLoanInformationRepository;
 
-    public FileConverterService(){
+    public FileConverterService(LoanInformationRepository loanInformationRepository,
+                                AdditionalLoanInformationRepository additionalLoanInformationRepository,
+                                CombinedLoanDetailsRepository combinedLoanDetailsRepository,
+                                XmlProcessor xmlProcessor){
+        this.loanInformationRepository = loanInformationRepository;
+        this.additionalLoanInformationRepository = additionalLoanInformationRepository;
+        this.combinedLoanDetailsRepository = combinedLoanDetailsRepository;
         conversion = new HashMap<>();
-        conversion.put("xml-to-json", new XmlToJsonConversion());
+        conversion.put("xml-to-json", new XmlToJsonConversion(xmlProcessor));
         conversion.put("json-to-xml", new JsonToXmlConversion());
         conversion.put("text-to-xml", new TextToXmlConversion());
     }
@@ -45,7 +47,7 @@ public class FileConverterService {
         try {
             return new String(file.getBytes());
         } catch (IOException e) {
-            throw new ConversionException("Failed to read file content", e);
+                throw new ConversionException("Failed to read file content", e);
         }
     }
 

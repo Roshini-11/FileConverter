@@ -12,8 +12,8 @@ import lombok.ToString;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.validation.annotation.Validated;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 import java.util.UUID;
 
@@ -23,6 +23,7 @@ import java.util.UUID;
 @Table(name = "Additional_Loan_Information")
 @NoArgsConstructor
 @ToString
+@XmlRootElement
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AdditionalLoanInformation {
